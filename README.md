@@ -44,5 +44,5 @@
    ```
 7. 음성 인식 테스트
    ```bash
-   ./main -m ../whisper.cpp.models/whisper-medium-ko-1195h-q4_0.bin -nf -bo 1 -bs 2 -ps -l ko -f ./samples/sample.wav
+   ./main -m ../whisper.cpp.models/whisper-medium-ko-1195h-q4_0.bin -nf -bo 1 -bs 2 -ps -l ko -f ./manna_samples/sample.wav
    ``` 
