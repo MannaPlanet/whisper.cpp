@@ -3537,6 +3537,20 @@ static void whisper_process_logits(
         logits[vocab.token_translate]  = -INFINITY;
         logits[vocab.token_transcribe] = -INFINITY;
 
+        // Start of custom code block ---
+        // Added by Jangmin Oh 2023.05.15.
+        // Right after feeding the forced_decoder_ids (prompt), i.e., [50258:_SOT_, 50264:|ko|, 50359:|transcribe|],
+        // the only token that the decoder procude should be [50364:_BEG_].
+        // This enforced the above constraint. 
+        // As a result, the processing gap between HuggingFace's WhisperForConditionalGeneration and whisper.cpp's implementation is removed.
+        {
+            if (decoder.sequence.tokens.size() == 0) {
+                std::fill(logits.begin(), logits.end(), -INFINITY);
+                logits[vocab.token_beg] = 0.0f;
+            }
+        }
+        // --- End of Custom code block
+
         if (params.logits_filter_callback) {
             params.logits_filter_callback(&ctx, &state, tokens_cur.data(), tokens_cur.size(), logits.data(), params.logits_filter_callback_user_data);
         }
